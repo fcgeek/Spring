@@ -98,84 +98,52 @@ class SpringViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         ballView.y = selectedY
         ballView.rotate = selectedRotate
         
-        ballView.animation = animations[selectedRow].rawValue
-        ballView.curve = animationCurves[selectedEasing].rawValue
+        ballView.animation = data[0][selectedRow]
+        ballView.curve = data[1][selectedEasing]
     }
     
     func minimizeView(sender: AnyObject) {
-        SpringAnimation.spring(0.7, animations: {
+        spring(0.7, animations: {
             self.view.transform = CGAffineTransformMakeScale(0.935, 0.935)
         })
         UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: true)
     }
     
     func maximizeView(sender: AnyObject) {
-        SpringAnimation.spring(0.7, animations: {
+        spring(0.7, animations: {
             self.view.transform = CGAffineTransformMakeScale(1, 1)
         })
         UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.Default, animated: true)
     }
-
-    let animations: [Spring.AnimationPreset] = [
-        .Shake,
-        .Pop,
-        .Morph,
-        .Squeeze,
-        .Wobble,
-        .Swing,
-        .FlipX,
-        .FlipY,
-        .Fall,
-        .SqueezeLeft,
-        .SqueezeRight,
-        .SqueezeDown,
-        .SqueezeUp,
-        .SlideLeft,
-        .SlideRight,
-        .SlideDown,
-        .SlideUp,
-        .FadeIn,
-        .FadeOut,
-        .FadeInLeft,
-        .FadeInRight,
-        .FadeInDown,
-        .FadeInUp,
-        .ZoomIn,
-        .ZoomOut,
-        .Flash
-    ]
-
-    var animationCurves: [Spring.AnimationCurve] = [
-        .EaseIn,
-        .EaseOut,
-        .EaseInOut,
-        .Linear,
-        .Spring,
-        .EaseInSine,
-        .EaseOutSine,
-        .EaseInOutSine,
-        .EaseInQuad,
-        .EaseOutQuad,
-        .EaseInOutQuad,
-        .EaseInCubic,
-        .EaseOutCubic,
-        .EaseInOutCubic,
-        .EaseInQuart,
-        .EaseOutQuart,
-        .EaseInOutQuart,
-        .EaseInQuint,
-        .EaseOutQuint,
-        .EaseInOutQuint,
-        .EaseInExpo,
-        .EaseOutExpo,
-        .EaseInOutExpo,
-        .EaseInCirc,
-        .EaseOutCirc,
-        .EaseInOutCirc,
-        .EaseInBack,
-        .EaseOutBack,
-        .EaseInOutBack
-    ]
+    
+    var data = [[
+        "shake",
+        "pop",
+        "morph",
+        "squeeze",
+        "wobble",
+        "swing",
+        "flipX",
+        "flipY",
+        "fall",
+        "squeezeLeft",
+        "squeezeRight",
+        "squeezeDown",
+        "squeezeUp",
+        "slideLeft",
+        "slideRight",
+        "slideDown",
+        "slideUp",
+        "fadeIn",
+        "fadeOut",
+        "fadeInLeft",
+        "fadeInRight",
+        "fadeInDown",
+        "fadeInUp",
+        "zoomIn",
+        "zoomOut",
+        "flash",
+    ], ["spring", "linear", "easeIn", "easeOut", "easeInOut","easeInSine","easeOutSine","easeInOutSine","easeInQuad","easeOutQuad","easeInOutQuad","easeInCubic","easeOutCubic","easeInOutCubic","easeInQuart","easeOutQuart","easeInOutQuart","easeInQuint","easeOutQuint","easeInOutQuint","easeInExpo","easeOutExpo","easeInOutExpo","easeInCirc","easeOutCirc","easeInOutCirc","easeInBack","easeOutBack","easeInOutBack"]]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -242,11 +210,11 @@ class SpringViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     }
     
     func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return component == 0 ? animations.count : animationCurves.count
+        return data[component].count
     }
     
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return component == 0 ? animations[row].rawValue : animationCurves[row].rawValue
+        return data[component][row]
     }
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {

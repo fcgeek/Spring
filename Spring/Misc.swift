@@ -23,8 +23,8 @@
 import UIKit
 
 public extension String {
-    public var length: Int { return self.characters.count }
-
+//    var length: Int { return self.characters.count }
+    
     public func toURL() -> NSURL? {
         return NSURL(string: self)
     }
@@ -32,14 +32,14 @@ public extension String {
 
 public func htmlToAttributedString(text: String) -> NSAttributedString! {
     let htmlData = text.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
-    let htmlString: NSAttributedString?
     do {
-        htmlString = try NSAttributedString(data: htmlData!, options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType], documentAttributes: nil)
-    } catch _ {
-        htmlString = nil
+        let htmlString = try NSAttributedString(data: htmlData!, options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType], documentAttributes: nil)
+        return htmlString
+    } catch {
+        print(error)
     }
     
-    return htmlString
+    return nil
 }
 
 public func degreesToRadians(degrees: CGFloat) -> CGFloat {
@@ -70,10 +70,10 @@ public extension UIColor {
         var hex:   String = hex
         
         if hex.hasPrefix("#") {
-            let index = hex.startIndex.advancedBy(1)
+            let index   = hex.startIndex.advancedBy(1)
             hex         = hex.substringFromIndex(index)
         }
-
+        
         let scanner = NSScanner(string: hex)
         var hexValue: CUnsignedLongLong = 0
         if scanner.scanHexLongLong(&hexValue) {
@@ -97,7 +97,7 @@ public extension UIColor {
                 blue  = CGFloat((hexValue & 0x0000FF00) >> 8)  / 255.0
                 alpha = CGFloat(hexValue & 0x000000FF)         / 255.0
             default:
-                print("Invalid RGB string, number of characters after '#' should be either 3, 4, 6 or 8", terminator: "")
+                print("Invalid RGB string, number of characters after '#' should be either 3, 4, 6 or 8")
             }
         } else {
             print("Scan hex error")
@@ -142,7 +142,7 @@ public func randomStringWithLength (len : Int) -> NSString {
     
     let randomString : NSMutableString = NSMutableString(capacity: len)
     
-    for _ in 0 ..< len {
+    for _ in 0...len-1 {
         let length = UInt32 (letters.length)
         let rand = arc4random_uniform(length)
         randomString.appendFormat("%C", letters.characterAtIndex(Int(rand)))
@@ -153,11 +153,11 @@ public func randomStringWithLength (len : Int) -> NSString {
 
 public func timeAgoSinceDate(date:NSDate, numericDates:Bool) -> String {
     let calendar = NSCalendar.currentCalendar()
-    let unitFlags: NSCalendarUnit = [NSCalendarUnit.Minute, NSCalendarUnit.Hour, NSCalendarUnit.Day, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.Second]
+    let unitFlags: NSCalendarUnit = [.Minute, .Hour, .Day, .Year, .Month, .Year, .Second]
     let now = NSDate()
     let earliest = now.earlierDate(date)
-    let latest = (earliest == now) ? date : now
-    let components: NSDateComponents = calendar.components(unitFlags, fromDate: earliest, toDate: latest, options: [])
+    let latest = now.laterDate(date)
+    let components = calendar.components(unitFlags, fromDate: earliest, toDate: latest, options: .WrapComponents)
     
     if (components.year >= 2) {
         return "\(components.year)y"

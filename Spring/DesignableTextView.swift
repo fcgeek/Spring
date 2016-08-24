@@ -41,12 +41,9 @@ import UIKit
             layer.cornerRadius = cornerRadius
         }
     }
-
+    
     @IBInspectable public var lineHeight: CGFloat = 1.5 {
         didSet {
-            let font = UIFont(name: self.font!.fontName, size: self.font!.pointSize)
-            let text = self.text
-            
             let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.lineSpacing = lineHeight
             
@@ -57,5 +54,5 @@ import UIKit
             self.attributedText = attributedString
         }
     }
-
+    
 }

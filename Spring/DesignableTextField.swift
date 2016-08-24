@@ -1,3 +1,4 @@
+
 // The MIT License (MIT)
 //
 // Copyright (c) 2015 Meng To (meng@designcode.io)
@@ -55,7 +56,7 @@ import UIKit
     
     @IBInspectable public var rightPadding: CGFloat = 0 {
         didSet {
-            let padding = UIView(frame: CGRectMake(0, 0, rightPadding, 0))
+            let padding = UIView(frame: CGRectMake(0, 0, 0, rightPadding))
             
             rightViewMode = UITextFieldViewMode.Always
             rightView = padding
@@ -79,12 +80,9 @@ import UIKit
             layer.cornerRadius = cornerRadius
         }
     }
-   
+    
     @IBInspectable public var lineHeight: CGFloat = 1.5 {
-        didSet {
-            let font = UIFont(name: self.font!.fontName, size: self.font!.pointSize)
-            let text = self.text
-            
+        didSet {            
             let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.lineSpacing = lineHeight
             
